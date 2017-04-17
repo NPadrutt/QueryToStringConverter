@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
@@ -21,15 +22,17 @@ namespace QueryToStringConverter
             string text;
             InputQueryTextBlock.Document.GetText(TextGetOptions.UseCrlf, out text);
 
-            var lines = text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+            var lines = text.Split(new[] { Environment.NewLine }, StringSplitOptions.None).ToList();
 
             var outputStringBuilder = new StringBuilder();
 
-            for (var index = 0; index < lines.Length; index++)
+            lines.RemoveAll(string.IsNullOrWhiteSpace);
+
+            for (var index = 0; index < lines.Count; index++)
             {
                 var line = lines[index];
 
-                if (index == lines.Length - 1)
+                if (index == lines.Count - 1)
                 {
                     outputStringBuilder.AppendLine("\"" + line + " \" ");
                 }
